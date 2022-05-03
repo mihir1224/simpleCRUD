@@ -14,8 +14,8 @@ app.use(express.json());
 const userRoutes = require("./routes/user_routes");
 
 //api link for user
-app.use("/api/user", userRoutes);
-//dcd cdvcd
+app.use("/api", userRoutes);
+
 //connect to database
 mongoose.connect(
   process.env.DB_CONNECT,
