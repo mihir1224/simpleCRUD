@@ -5,7 +5,7 @@ exports.generateAuthToken = async function (userId) {
   try {
     const token = jwt.sign(
       { _id: userId.toString() },
-      "abcdefghijklmnopqrstuvwxyz1234567890"
+      "abcdefghijklmnopqrstuvwxyz123456"
     );
     return token;
   } catch (error) {
