@@ -2,8 +2,6 @@ const users = require("../model/user_model");
 const jwt = require("../jwt");
 const { use } = require("../routes/user_routes");
 const { updateOne } = require("../model/user_model");
-// const nodemailer = require("nodemailer");
-// const { user } = require("firebase-functions/v1/auth");
 
 //create
 exports.signUp = async (req, res) => {
@@ -166,10 +164,14 @@ exports.forgotPassword = async (req, res) => {
   try {
     const email = req.body.email;
     const password = req.body.password;
-    const userDetails = await users.findOne({ email: email });
+    let userDetails = await users.findOne({ email: email });
 
     if (userDetails) {
-      await userDetails.updateOne({ password: password });
+      let userDetails = await users.findOneAndUpdate(
+        { email: email },
+        { password: password },
+        { new: true }
+      );
 
       res.json({
         error: false,
