@@ -167,7 +167,7 @@ exports.forgotPassword = async (req, res) => {
     let userDetails = await users.findOne({ email: email });
 
     if (userDetails) {
-      let userDetails = await users.findOneAndUpdate(
+      userDetails = await users.findOneAndUpdate(
         { email: email },
         { password: password },
         { new: true }
