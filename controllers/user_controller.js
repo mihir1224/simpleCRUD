@@ -1,5 +1,9 @@
 const users = require("../model/user_model");
 const jwt = require("../jwt");
+const { use } = require("../routes/user_routes");
+const { updateOne } = require("../model/user_model");
+// const nodemailer = require("nodemailer");
+// const { user } = require("firebase-functions/v1/auth");
 
 //create
 exports.signUp = async (req, res) => {
@@ -29,6 +33,7 @@ exports.signUp = async (req, res) => {
   }
 };
 
+//User All data
 exports.getAllUser = async (req, res) => {
   try {
     const user = await users.find();
@@ -160,24 +165,27 @@ exports.login = async (req, res) => {
 exports.forgotPassword = async (req, res) => {
   try {
     const email = req.body.email;
+    const password = req.body.password;
+    const userDetails = await users.findOne({ email: email });
 
-    let userDetails = await users.findOne({ email: email });
     if (userDetails) {
-      res.send({
+      await userDetails.updateOne({ password: password });
+
+      res.json({
         error: false,
         statusCode: 200,
-        message: "User email is matched",
+        message: "Password updated successfully",
         data: userDetails,
       });
     } else {
-      res.send({
+      res.json({
         error: true,
         statusCode: 404,
-        message: "User email is not matched",
+        message: "User not found",
       });
     }
   } catch (error) {
-    res.send({
+    res.json({
       error: true,
       statusCode: 404,
       message: error.message,
