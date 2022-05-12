@@ -1,9 +1,7 @@
 const users = require("../model/user_model");
 const jwt = require("../jwt");
-const { use } = require("../routes/user_routes");
-const { updateOne } = require("../model/user_model");
 
-//create
+//User sign-up
 exports.signUp = async (req, res) => {
   try {
     const user = new users({
@@ -31,7 +29,7 @@ exports.signUp = async (req, res) => {
   }
 };
 
-//User All data
+//All user data
 exports.getAllUser = async (req, res) => {
   try {
     const user = await users.find();
@@ -51,7 +49,7 @@ exports.getAllUser = async (req, res) => {
   }
 };
 
-//show single user
+//Show single user
 exports.getUserById = async (req, res) => {
   try {
     const user = await users.findById(req.params.userId);
@@ -71,7 +69,7 @@ exports.getUserById = async (req, res) => {
   }
 };
 
-//update user data
+//Update user data
 exports.updateUserData = async (req, res) => {
   try {
     const User = req.body;
@@ -95,7 +93,7 @@ exports.updateUserData = async (req, res) => {
   }
 };
 
-//delete user data
+//Delete user data
 exports.deleteUserData = async (req, res) => {
   try {
     const deleteUser = await users.findByIdAndDelete(req.params.userId);
@@ -115,7 +113,7 @@ exports.deleteUserData = async (req, res) => {
   }
 };
 
-//login page
+//User login
 exports.login = async (req, res) => {
   try {
     const email = req.body.email;
@@ -159,7 +157,7 @@ exports.login = async (req, res) => {
   }
 };
 
-//forgot password
+//Forgot password
 exports.forgotPassword = async (req, res) => {
   try {
     const email = req.body.email;
