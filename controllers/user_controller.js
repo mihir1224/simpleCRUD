@@ -1,5 +1,6 @@
 const users = require("../model/user_model");
 const jwt = require("../jwt");
+const response = require("../response");
 
 //User sign-up
 exports.signUp = async (req, res) => {
@@ -14,18 +15,11 @@ exports.signUp = async (req, res) => {
     });
 
     const saveUser = await user.save();
-    res.send({
-      error: false,
-      statusCode: 200,
-      message: "User created successfully",
-      data: saveUser,
-    });
+    res.send(
+      response.generate(false, 200, "User created successfully", saveUser)
+    );
   } catch (error) {
-    res.send({
-      error: true,
-      statusCode: 404,
-      message: error.message,
-    });
+    res.send(response.generate(true, 404, error.message));
   }
 };
 
@@ -33,19 +27,17 @@ exports.signUp = async (req, res) => {
 exports.getAllUser = async (req, res) => {
   try {
     const user = await users.find();
-    res.json({
-      error: false,
-      statusCode: 200,
-      message: "User fetched successfully",
-      records: user.length,
-      data: user,
-    });
+    res.send(
+      response.generate(
+        false,
+        200,
+        "User fetched successfully",
+        user,
+        user.length
+      )
+    );
   } catch (error) {
-    res.json({
-      error: true,
-      statusCode: 404,
-      message: error.message,
-    });
+    res.send(response.generate(true, 404, error.message));
   }
 };
 
@@ -53,19 +45,11 @@ exports.getAllUser = async (req, res) => {
 exports.getUserById = async (req, res) => {
   try {
     const user = await users.findById(req.params.userId);
-    res.json({
-      error: false,
-      statusCode: 200,
-      message: "User data fetched successfully",
-      records: user.length,
-      data: user,
-    });
+    res.send(
+      response.generate(false, 200, "User data fetched successfully", user)
+    );
   } catch (error) {
-    res.status(404).send({
-      error: true,
-      statusCode: 404,
-      message: error.message,
-    });
+    res.send(response.generate(true, 404, error.message));
   }
 };
 
@@ -77,19 +61,17 @@ exports.updateUserData = async (req, res) => {
     const updateUser = await users.findByIdAndUpdate(req.params.userId, User, {
       new: true,
     });
-    res.json({
-      error: true,
-      statusCode: 200,
-      message: "User updated successfully",
-      records: updateUser.length,
-      data: updateUser,
-    });
+    res.send(
+      response.generate(
+        true,
+        200,
+        "User updated successfully",
+        updateUser.length,
+        updateUser
+      )
+    );
   } catch (error) {
-    res.json({
-      error: true,
-      statusCode: 404,
-      message: error.message,
-    });
+    res.send(response.generate(true, 404, error.message));
   }
 };
 
@@ -97,19 +79,11 @@ exports.updateUserData = async (req, res) => {
 exports.deleteUserData = async (req, res) => {
   try {
     const deleteUser = await users.findByIdAndDelete(req.params.userId);
-    res.json({
-      error: false,
-      statusCode: 200,
-      message: "User deleted successfully",
-      records: deleteUser.length,
-      data: deleteUser,
-    });
+    res.send(
+      response.generate(false, 200, "User deleted successfully", deleteUser)
+    );
   } catch (error) {
-    res.json({
-      error: true,
-      statusCode: 404,
-      message: error.message,
-    });
+    res.send(response.generate(true, 404, error.message));
   }
 };
 
@@ -127,33 +101,20 @@ exports.login = async (req, res) => {
         userData = userData.toObject();
         delete userData.password;
 
-        res.json({
-          error: false,
-          statusCode: 200,
-          message: "Login successfully",
-          Token: token,
-          data: userData,
-        });
+        res.send(
+          response.generate(false, 200, "Login successfully", {
+            ...userData,
+            ...{ token: token },
+          })
+        );
       } else {
-        res.json({
-          error: true,
-          statusCode: 401,
-          message: "Invalid password",
-        });
+        res.send(response.generate(true, 401, "Invalid password"));
       }
     } else {
-      res.json({
-        error: true,
-        statusCode: 204,
-        message: "Account not found",
-      });
+      res.send(response.generate(true, 204, "Account not found"));
     }
   } catch (error) {
-    res.json({
-      error: true,
-      statusCode: 404,
-      message: error.message,
-    });
+    res.send(response.generate(true, 404, error.message));
   }
 };
 
@@ -171,24 +132,18 @@ exports.forgotPassword = async (req, res) => {
         { new: true }
       );
 
-      res.json({
-        error: false,
-        statusCode: 200,
-        message: "Password updated successfully",
-        data: userDetails,
-      });
+      res.send(
+        response.generate(
+          false,
+          200,
+          "Password updated successfully",
+          userDetails
+        )
+      );
     } else {
-      res.json({
-        error: true,
-        statusCode: 404,
-        message: "User not found",
-      });
+      res.send(response.generate(true, 404, "User not found"));
     }
   } catch (error) {
-    res.json({
-      error: true,
-      statusCode: 404,
-      message: error.message,
-    });
+    res.send(response.generate(true, 404, error.message));
   }
 };
