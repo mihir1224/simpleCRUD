@@ -103,8 +103,8 @@ exports.login = async (req, res) => {
 
         res.send(
           response.generate(false, 200, "Login successfully", {
-            ...userData,
             ...{ token: token },
+            ...userData,
           })
         );
       } else {
